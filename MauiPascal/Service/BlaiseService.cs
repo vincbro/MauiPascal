@@ -1,5 +1,6 @@
 ﻿using MauiPascal.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace MauiPascal.Service;
@@ -13,8 +14,16 @@ public class BlaiseService(HttpClient client)
 			{ "q", query },
 			{ "count", count.ToString() },
 		};
-		var request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString("/search", queryParams));
+		var request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString("/search/area", queryParams));
 		var result = await client.SendAsync(request);
-		return await result.Content.ReadFromJsonAsync<List<Area>>() ?? [];
+		if(result.IsSuccessStatusCode)
+		{
+			return await result.Content.ReadFromJsonAsync<List<Area>>() ?? [];
+		}
+		else
+		{
+			Trace.WriteLine("Failed to fetch search");
+			return [];
+		}
 	}
 }

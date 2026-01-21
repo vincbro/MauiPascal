@@ -9,6 +9,10 @@ namespace MauiPascal
 	{
 		private MainPageViewModel vm;
 		private readonly BlaiseService blaise;
+		private bool fromFocused = true;
+		private bool toFocused = false;
+		private List<Area> fromSuggestions = [];
+		private List<Area> toSuggestions = [];
 
 		public MainPage(BlaiseService blaise)
 		{
@@ -23,8 +27,6 @@ namespace MauiPascal
 		private CancellationTokenSource searchCts = new();
 		private async void From_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			vm.FromArea = null;
-			UpdateFindRoute();
 			searchCts?.Cancel();
 			searchCts = new CancellationTokenSource();
 			var token = searchCts.Token;
@@ -32,58 +34,54 @@ namespace MauiPascal
 			try
 			{
 				await Task.Delay(150, token);
-				var results = await blaise.SearchAsync(From.Text);
+				fromSuggestions = await blaise.SearchAsync(From.Text, 15);
 				if(token.IsCancellationRequested) return;
-				vm.FromSuggestions.Clear();
-				foreach(var result in results)
+				vm.Suggestions.Clear();
+				foreach(var result in fromSuggestions)
 				{
-					vm.FromSuggestions.Add(result);
+					vm.Suggestions.Add(result);
 				}
 			}
 			catch(TaskCanceledException)
 			{
-			}
-		}
-		private void FromSuggestionTapped(object sender, TappedEventArgs e)
-		{
-			if(e.Parameter != null && e.Parameter is Area)
-			{
-				var area = (Area)e.Parameter;
-				From.Text = area.ToString();
-				vm.FromArea = area;
-				FromSuggestions.IsVisible = false;
-				Trace.WriteLine($"From: {area.Name}");
-				UpdateFindRoute();
 			}
 		}
 
 		private void From_Focused(object sender, FocusEventArgs e)
 		{
-			FromSuggestions.IsVisible = true;
+			fromFocused = true;
+			toFocused = false;
+
+			vm.Suggestions.Clear();
+			foreach(var result in fromSuggestions)
+			{
+				vm.Suggestions.Add(result);
+			}
 		}
 
-		private void From_Unfocused(object sender, FocusEventArgs e)
+		private void RemoveFrom_Clicked(object sender, EventArgs e)
 		{
-			FromSuggestions.IsVisible = false;
+
+			From.IsVisible = true;
+			FromArea.IsVisible = false;
+			vm.FromArea = null;
 		}
 
 
 		private async void To_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			vm.ToArea = null;
-			UpdateFindRoute();
 			searchCts?.Cancel();
 			searchCts = new CancellationTokenSource();
 			var token = searchCts.Token;
 			try
 			{
 				await Task.Delay(150, token);
-				var results = await blaise.SearchAsync(To.Text);
+				toSuggestions = await blaise.SearchAsync(To.Text, 20);
 				if(token.IsCancellationRequested) return;
-				vm.ToSuggestions.Clear();
-				foreach(var result in results)
+				vm.Suggestions.Clear();
+				foreach(var result in toSuggestions)
 				{
-					vm.ToSuggestions.Add(result);
+					vm.Suggestions.Add(result);
 				}
 			}
 			catch(TaskCanceledException)
@@ -91,29 +89,52 @@ namespace MauiPascal
 			}
 		}
 
-		private void ToSuggestionTapped(object sender, TappedEventArgs e)
+		private void To_Focused(object sender, FocusEventArgs e)
+		{
+			fromFocused = false;
+			toFocused = true;
+
+			vm.Suggestions.Clear();
+			foreach(var result in toSuggestions)
+			{
+				vm.Suggestions.Add(result);
+			}
+		}
+
+		private void RemoveTo_Clicked(object sender, EventArgs e)
+		{
+			To.IsVisible = true;
+			ToArea.IsVisible = false;
+			vm.ToArea = null;
+		}
+
+		private void SuggestionTapped(object sender, TappedEventArgs e)
 		{
 			if(e.Parameter != null && e.Parameter is Area)
 			{
 				var area = (Area)e.Parameter;
-				To.Text = area.ToString();
-				vm.ToArea = area;
-				ToSuggestions.IsVisible = false;
-				Trace.WriteLine($"To: {area.Name}");
+
+				if(fromFocused)
+				{
+					vm.FromArea = area;
+					From.Text = area.ToString();
+					From.IsVisible = false;
+					FromArea.IsVisible = true;
+					FromAreaText.Text = area.ToString();
+				}
+				else if(toFocused)
+				{
+					vm.ToArea = area;
+					To.Text = area.ToString();
+					To.IsVisible = false;
+					ToArea.IsVisible = true;
+					ToAreaText.Text = area.ToString();
+				}
 				UpdateFindRoute();
-
 			}
+
 		}
 
-		private void To_Focused(object sender, FocusEventArgs e)
-		{
-			ToSuggestions.IsVisible = true;
-		}
-
-		private void To_Unfocused(object sender, FocusEventArgs e)
-		{
-			ToSuggestions.IsVisible = false;
-		}
 
 		private void UpdateFindRoute()
 		{
@@ -122,7 +143,7 @@ namespace MauiPascal
 
 		private void FindRoute_Clicked(object sender, EventArgs e)
 		{
-
+			Trace.WriteLine($"From {vm.FromArea!.Id} to {vm.ToArea!.Id} @ {vm.Time}");
 		}
 	}
 }

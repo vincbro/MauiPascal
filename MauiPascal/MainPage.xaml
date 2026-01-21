@@ -3,69 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiPascal.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
+    <VerticalStackLayout
             Padding="25,50"
-            Spacing="25" VerticalOptions="End">
-
-            <Grid VerticalOptions="Start">
-                <VerticalStackLayout>
-                    <Entry x:Name="From"
+            Spacing="25">
+        <Entry x:Name="From"
                         Placeholder="From"
                         TextChanged="From_TextChanged"
                         Focused="From_Focused" 
-                        Unfocused="From_Unfocused"/>
-                </VerticalStackLayout>
-                <CollectionView x:Name="FromSuggestions"
-                ItemsSource="{Binding FromSuggestions}"
-                    IsVisible="False"
-                    BackgroundColor="LightGray"
-                    VerticalOptions="Start"
-                    ZIndex="1"
-                    Margin="0,50,0,0">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding .}" Padding="10">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="FromSuggestionTapped" 
-                                              CommandParameter="{Binding .}" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
+                        />
+        <Grid ColumnDefinitions="*, Auto" 
+                    VerticalOptions="Center" 
+                  IsVisible="False"
+                    HorizontalOptions="Fill"
+                  x:Name="FromArea">
+            <Label Text="Station name" 
+           x:Name="FromAreaText" 
+                        VerticalOptions="Center" 
+                        HorizontalOptions="Start" 
+                        Grid.Column="0"/>
+            <Button Text="X" 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="End" 
+                            Grid.Column="1" Clicked="RemoveFrom_Clicked"/>
+        </Grid>
 
-            <Grid VerticalOptions="Start">
-                <VerticalStackLayout>
-                    <Entry x:Name="To"
+        <Entry x:Name="To"
                 Placeholder="To"
                TextChanged="To_TextChanged"
                Focused="To_Focused" 
-               Unfocused="To_Unfocused"/>
-                </VerticalStackLayout>
-                <CollectionView x:Name="ToSuggestions"
-       ItemsSource="{Binding ToSuggestions}"
-           IsVisible="False"
-           BackgroundColor="LightGray"
-           VerticalOptions="Start"
-           ZIndex="1"
-           Margin="0,50,0,0">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding .}" Padding="10">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ToSuggestionTapped" 
-                                     CommandParameter="{Binding .}" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
+              />
+        <Grid ColumnDefinitions="*, Auto" 
+          VerticalOptions="Center" 
+        IsVisible="False"
+          HorizontalOptions="Fill"
+        x:Name="ToArea">
+            <Label Text="Station name" 
 
-            <Button x:Name="FindRoute" Text="Find route" Clicked="FindRoute_Clicked"/>
-        </VerticalStackLayout>
-    </ScrollView>
+           x:Name="ToAreaText" 
+              VerticalOptions="Center" 
+              HorizontalOptions="Start" 
+              Grid.Column="0"/>
+            <Button Text="X" 
+                  VerticalOptions="Center" 
+                  HorizontalOptions="End" 
+                  Grid.Column="1" Clicked="RemoveTo_Clicked"/>
+        </Grid>
+        <Grid ColumnDefinitions="auto,auto,auto,auto,auto" RowDefinitions="auto, auto" HorizontalOptions="Center">
+            <Entry Text="{Binding Hour}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
+            <Label Text=":" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
+            <Entry Text="{Binding Minute}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="2"/>
+            <Label Text=":" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
+            <Entry Text="{Binding Second}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="4"/>
+            <Button Text="Now" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Command="{Binding SetTimeToNowCommand}" CommandParameter="."/>
+        </Grid>
+        <Button x:Name="FindRoute" Text="Find route" Clicked="FindRoute_Clicked"/>
+            <CollectionView x:Name="Suggestions"
+                ItemsSource="{Binding Suggestions}"
+                    VerticalOptions="Start">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" Padding="10">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SuggestionTapped" 
+                                              CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+    </VerticalStackLayout>
 
 </ContentPage>
