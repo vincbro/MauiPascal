@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiPascal.RoutePage"
+             Title="RoutePage">
+    <VerticalStackLayout>
+        <VerticalStackLayout Spacing="10" Padding="20">
+            <Label Text="Route Results" Style="{StaticResource HeaderLabel}" />
+        </VerticalStackLayout>
+
+        <Grid BackgroundColor="#80000000" 
+              IsVisible="{Binding IsBusy}"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="{StaticResource Primary}"
+                                   HeightRequest="50"
+                                   WidthRequest="50" />
+
+                <Label Text="Fetching Routes..." 
+                       TextColor="White" 
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <VerticalStackLayout Spacing="10" Padding="20" IsVisible="{Binding RouteFound}">
+            <Label Text="{Binding Itinerary.From}" Style="{StaticResource HeaderLabel}" />
+            <Label Text="{Binding Itinerary.To}" Style="{StaticResource HeaderLabel}" />
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

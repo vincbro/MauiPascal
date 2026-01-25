@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MauiPascal.Models;
 using System.Collections.ObjectModel;
 
 namespace MauiPascal.ViewModels;
@@ -9,13 +8,18 @@ namespace MauiPascal.ViewModels;
 public partial class MainPageViewModel : ObservableObject
 {
 	[ObservableProperty]
-	private ObservableCollection<Area> suggestions;
+	private ObservableCollection<Models.Location> suggestions;
 
 	[ObservableProperty]
-	private Area? fromArea = null;
+	private Models.Location? fromArea = null;
 
 	[ObservableProperty]
-	private Area? toArea = null;
+	private Models.Location? toArea = null;
+
+	[ObservableProperty]
+	private bool isDeparture = true;
+	[ObservableProperty]
+	private bool isArrival = false;
 
 	[ObservableProperty]
 	private string hour = string.Empty;

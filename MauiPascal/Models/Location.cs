@@ -2,8 +2,10 @@
 
 namespace MauiPascal.Models;
 
-public class Area
+public class Location
 {
+	[JsonPropertyName("type")]
+	public string? Type { get; set; } = null;
 
 	[JsonPropertyName("id")]
 	public string Id { get; set; } = string.Empty;

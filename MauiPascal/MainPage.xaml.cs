@@ -1,7 +1,5 @@
-﻿using MauiPascal.Models;
-using MauiPascal.Service;
+﻿using MauiPascal.Service;
 using MauiPascal.ViewModels;
-using System.Diagnostics;
 
 namespace MauiPascal
 {
@@ -11,8 +9,8 @@ namespace MauiPascal
 		private readonly BlaiseService blaise;
 		private bool fromFocused = true;
 		private bool toFocused = false;
-		private List<Area> fromSuggestions = [];
-		private List<Area> toSuggestions = [];
+		private List<Models.Location> fromSuggestions = [];
+		private List<Models.Location> toSuggestions = [];
 
 		public MainPage(BlaiseService blaise)
 		{
@@ -61,7 +59,6 @@ namespace MauiPascal
 
 		private void RemoveFrom_Clicked(object sender, EventArgs e)
 		{
-
 			From.IsVisible = true;
 			FromArea.IsVisible = false;
 			vm.FromArea = null;
@@ -110,9 +107,9 @@ namespace MauiPascal
 
 		private void SuggestionTapped(object sender, TappedEventArgs e)
 		{
-			if(e.Parameter != null && e.Parameter is Area)
+			if(e.Parameter != null && e.Parameter is Models.Location)
 			{
-				var area = (Area)e.Parameter;
+				var area = (Models.Location)e.Parameter;
 
 				if(fromFocused)
 				{
@@ -141,9 +138,9 @@ namespace MauiPascal
 			FindRoute.IsEnabled = vm.FromArea != null && vm.ToArea != null;
 		}
 
-		private void FindRoute_Clicked(object sender, EventArgs e)
+		private async void FindRoute_Clicked(object sender, EventArgs e)
 		{
-			Trace.WriteLine($"From {vm.FromArea!.Id} to {vm.ToArea!.Id} @ {vm.Time}");
+			await Shell.Current.GoToAsync($"{nameof(RoutePage)}?from={vm.FromArea!.Id}&to={vm.ToArea!.Id}&time={vm.Time}&is_departure={vm.IsDeparture}");
 		}
 	}
 }

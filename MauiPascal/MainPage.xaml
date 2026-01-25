@@ -48,29 +48,68 @@
                   HorizontalOptions="End" 
                   Grid.Column="1" Clicked="RemoveTo_Clicked"/>
         </Grid>
-        <Grid ColumnDefinitions="auto,auto,auto,auto,auto" RowDefinitions="auto, auto" HorizontalOptions="Center">
-            <Entry Text="{Binding Hour}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="0"/>
-            <Label Text=":" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="1"/>
-            <Entry Text="{Binding Minute}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="2"/>
-            <Label Text=":" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="3"/>
-            <Entry Text="{Binding Second}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Grid.Column="4"/>
-            <Button Text="Now" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Command="{Binding SetTimeToNowCommand}" CommandParameter="."/>
+        <Grid ColumnDefinitions="50, Auto, 50, Auto, 50, Auto" 
+      RowDefinitions="Auto" 
+      ColumnSpacing="8" 
+      HorizontalOptions="Center">
+
+            <Entry Text="{Binding Hour}" 
+           HeightRequest="50"
+           WidthRequest="{Binding Source={RelativeSource Self}, Path=HeightRequest}"
+           Keyboard="Numeric"
+           MaxLength="2"
+           HorizontalTextAlignment="Center" 
+           VerticalTextAlignment="Center" 
+           Grid.Column="0"/>
+
+            <Label Text=":" FontSize="Large" VerticalTextAlignment="Center" Grid.Column="1"/>
+
+            <Entry Text="{Binding Minute}" 
+           HeightRequest="50"
+           WidthRequest="{Binding Source={RelativeSource Self}, Path=HeightRequest}"
+           Keyboard="Numeric"
+           MaxLength="2"
+           HorizontalTextAlignment="Center" 
+           VerticalTextAlignment="Center" 
+           Grid.Column="2"/>
+
+            <Label Text=":" FontSize="Large" VerticalTextAlignment="Center" Grid.Column="3"/>
+
+            <Entry Text="{Binding Second}" 
+           HeightRequest="50"
+           WidthRequest="{Binding Source={RelativeSource Self}, Path=HeightRequest}"
+           Keyboard="Numeric"
+           MaxLength="2"
+           HorizontalTextAlignment="Center" 
+           VerticalTextAlignment="Center" 
+           Grid.Column="4"/>
+
+            <Button Text="Now" 
+            Command="{Binding SetTimeToNowCommand}" 
+            Grid.Column="5" 
+            VerticalOptions="Center"/>
         </Grid>
+        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="6" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+            <Label Text="Search for:" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+            <RadioButton IsChecked="{Binding IsDeparture}" Content="Departure"/>
+            <RadioButton IsChecked="{Binding IsArrival}" Content="Arrival"/>
+        </HorizontalStackLayout>
+
         <Button x:Name="FindRoute" Text="Find route" Clicked="FindRoute_Clicked"/>
-            <CollectionView x:Name="Suggestions"
+        <CollectionView x:Name="Suggestions"
                 ItemsSource="{Binding Suggestions}"
                     VerticalOptions="Start">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding .}" Padding="10">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="SuggestionTapped" 
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding .}" Padding="10">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SuggestionTapped" 
                                               CommandParameter="{Binding .}" />
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 
 </ContentPage>

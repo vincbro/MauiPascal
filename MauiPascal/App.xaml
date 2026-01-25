@@ -10,8 +10,6 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Color x:Key="Primary">#FF8C00</Color>
-            <Color x:Key="PrimaryDark">#E67E22</Color>
             <Color x:Key="Secondary">#2C3E50</Color>
             <Color x:Key="BackgroundDark">#121212</Color>
             <Color x:Key="SurfaceDark">#1E1E1E</Color>
@@ -92,6 +90,56 @@
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style TargetType="RadioButton">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="FontFamily" Value="OpenSansRegular" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="ControlTemplate">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid ColumnDefinitions="30, *" ColumnSpacing="10" VerticalOptions="Center" BackgroundColor="Transparent">
+                                <Ellipse Grid.Column="0"
+                             WidthRequest="22"
+                             HeightRequest="22"
+                             Stroke="{StaticResource TextSecondary}"
+                             StrokeThickness="2"
+                             Fill="Transparent" 
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center" />
+
+                                <Ellipse x:Name="CheckDot"
+                             Grid.Column="0"
+                             WidthRequest="12"
+                             HeightRequest="12"
+                             Fill="{StaticResource Primary}"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             Scale="0" />
+                                <ContentPresenter Grid.Column="1" VerticalOptions="Center" />
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Checked">
+                                                <VisualState.Setters>
+                                                    <Setter TargetName="CheckDot" Property="Scale" Value="1" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Unchecked">
+                                                <VisualState.Setters>
+                                                    <Setter TargetName="CheckDot" Property="Scale" Value="0" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
                 </Setter>
             </Style>
         </ResourceDictionary>
