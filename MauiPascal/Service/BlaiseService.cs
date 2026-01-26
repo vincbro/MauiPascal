@@ -49,7 +49,7 @@ public class BlaiseService(HttpClient client)
 		{
 			{ "from", from },
 			{ "to", to },
-			{ isDeparture ? "departure_time" : "arrival_time", time  },
+			{ isDeparture ? "departure_at" : "arrive_at", time  },
 		};
 		var request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString("/routing", queryParams));
 		var result = await client.SendAsync(request);

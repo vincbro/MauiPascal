@@ -16,10 +16,8 @@ public partial class RoutePage : ContentPage, IQueryAttributable
 		InitializeComponent();
 	}
 
-	// This is where the magic happens!
 	public async void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
-		// 1. Grab all the info you passed
 		if(query.TryGetValue("from", out var rawFrom) &&
 			query.TryGetValue("to", out var rawTo) &&
 			query.TryGetValue("time", out var rawTime) &&
@@ -28,11 +26,25 @@ public partial class RoutePage : ContentPage, IQueryAttributable
 			var from = (string)rawFrom ?? string.Empty;
 			var to = (string)rawTo ?? string.Empty;
 			var time = (string)rawTime ?? string.Empty;
-			var isDeparture = bool.Parse((string)rawIsDeparture ?? string.Empty);
+			var isDeparture = bool.Parse((string)rawIsDeparture ?? "true");
+			
 			vm.IsBusy = true;
-			vm.Itinerary = await blaise.RouteAsync(from, to, time, isDeparture);
-			vm.IsBusy = false;
-			vm.RouteFound = vm.Itinerary != null;
+			vm.RouteFound = false;
+			
+			try
+			{
+				vm.Itinerary = await blaise.RouteAsync(from, to, time, isDeparture);
+				vm.RouteFound = vm.Itinerary != null;
+			}
+			catch (Exception)
+			{
+				vm.RouteFound = false;
+				vm.Itinerary = null;
+			}
+			finally
+			{
+				vm.IsBusy = false;
+			}
 		}
 	}
 }

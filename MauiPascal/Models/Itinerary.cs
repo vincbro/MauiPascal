@@ -12,4 +12,18 @@ public class Itinerary
 
 	[JsonPropertyName("legs")]
 	public List<Leg> Legs { get; set; } = [];
+
+	/// <summary>
+	/// Total duration of the itinerary in minutes
+	/// </summary>
+	public int TotalDurationMinutes
+	{
+		get
+		{
+		if (Legs == null || Legs.Count == 0) return 0;
+		var firstLeg = Legs.First();
+		var lastLeg = Legs.Last();
+		return (lastLeg.ArrivalTime - firstLeg.DepartureTime) / 60;
+		}
+	}
 }

@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace MauiPascal.Models;
 
-public class Leg
+public partial class Leg : ObservableObject
 {
 	[JsonPropertyName("from")]
 	public Location From { get; set; } = default!;
@@ -11,7 +12,7 @@ public class Leg
 	public Location To { get; set; } = default!;
 
 	[JsonPropertyName("departue_time")]
-	public int DepartueTime { get; set; } = 0;
+	public int DepartureTime { get; set; } = 0;
 
 	[JsonPropertyName("arrival_time")]
 	public int ArrivalTime { get; set; } = 0;
@@ -30,4 +31,11 @@ public class Leg
 
 	[JsonPropertyName("short_name")]
 	public string? ShortName { get; set; } = null;
+	[ObservableProperty]
+	private bool isExpanded;
+
+	/// <summary>
+	/// Duration of the leg in minutes
+	/// </summary>
+	public int DurationMinutes => (ArrivalTime - DepartureTime) / 60;
 }

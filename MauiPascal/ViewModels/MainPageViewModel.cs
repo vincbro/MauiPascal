@@ -11,28 +11,36 @@ public partial class MainPageViewModel : ObservableObject
 	private ObservableCollection<Models.Location> suggestions;
 
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(CanSearch))]
 	private Models.Location? fromArea = null;
 
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(CanSearch))]
 	private Models.Location? toArea = null;
 
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(IsArrival))]
 	private bool isDeparture = true;
-	[ObservableProperty]
-	private bool isArrival = false;
+
+	public bool IsArrival
+	{
+		get => !isDeparture;
+		set
+		{
+			if (value)
+			{
+				IsDeparture = false;
+			}
+		}
+	}
 
 	[ObservableProperty]
-	private string hour = string.Empty;
+	[NotifyPropertyChangedFor(nameof(Time))]
+	private TimeSpan selectedTime;
 
-	[ObservableProperty]
-	private string minute = string.Empty;
+	public string Time => selectedTime.ToString(@"hh\:mm\:ss");
 
-	[ObservableProperty]
-	private string second = string.Empty;
-
-	public string Time => $"{Hour}:{Minute}:{Second}";
-
-	private bool AreasSet => FromArea != null && ToArea != null;
+	public bool CanSearch => FromArea != null && ToArea != null;
 
 	public MainPageViewModel()
 	{
@@ -44,8 +52,6 @@ public partial class MainPageViewModel : ObservableObject
 	private void SetTimeToNow()
 	{
 		var now = DateTime.Now;
-		Hour = now.Hour.ToString();
-		Minute = now.Minute.ToString();
-		Second = now.Second.ToString();
+		SelectedTime = now.TimeOfDay;
 	}
 }
